@@ -13,11 +13,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: ThemeData.from(
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.grey)),
+      // theme: ThemeData(
+      //   primaryColor: Colors.white,
+      //   colorScheme: ColorScheme.light().copyWith(primary: Colors.white),
+      //   primarySwatch: Colors.blue,
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      // ),
       home: Home(),
     );
   }
