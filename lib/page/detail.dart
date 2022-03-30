@@ -14,6 +14,7 @@ class DetailContentView extends StatefulWidget {
 
 class _DetailContentViewState extends State<DetailContentView>
     with SingleTickerProviderStateMixin {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   late Size size;
   late List<Map<String, String>> imgList;
   int _current = 0;
@@ -21,10 +22,12 @@ class _DetailContentViewState extends State<DetailContentView>
   final ScrollController _controller = ScrollController();
   late AnimationController _animationController;
   late Animation _colorTwean;
+  late bool isMyFavoriteContent;
 
   @override
   void initState() {
     super.initState();
+    isMyFavoriteContent = false;
 
     _animationController = AnimationController(vsync: this);
     _colorTwean = ColorTween(begin: Colors.white, end: Colors.black)
@@ -251,20 +254,18 @@ class _DetailContentViewState extends State<DetailContentView>
             ),
             delegate: SliverChildListDelegate(
               List.generate(20, (index) {
-                return Container(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(color: Colors.grey, height: 120),
-                        ),
-                        Text("상품 제목", style: TextStyle(fontSize: 14)),
-                        Text("가격",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
-                      ]),
-                );
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(color: Colors.grey, height: 120),
+                      ),
+                      Text("상품 제목", style: TextStyle(fontSize: 14)),
+                      Text("가격",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold)),
+                    ]);
               }).toList(),
             ),
           ),
@@ -281,12 +282,30 @@ class _DetailContentViewState extends State<DetailContentView>
       child: Row(children: [
         GestureDetector(
           onTap: () {
-            print("관심상품 이벤트 발생");
+            setState(() {
+              isMyFavoriteContent = !isMyFavoriteContent;
+            });
+
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //   duration: Duration(microseconds: 1000),
+            //   content: Text(
+            //       isMyFavoriteContent ? "관심목록에 추가됐습니다." : "관심목록에서 제거됐습니다."),
+            // ));
+            scaffoldKey.currentState?.showSnackBar(
+              SnackBar(
+                duration: Duration(microseconds: 1000),
+                content: Text(
+                    isMyFavoriteContent ? "관심목록에 추가됐습니다." : "관심목록에서 제거됐습니다."),
+              ),
+            );
           },
           child: SvgPicture.asset(
-            "assets/svg/heart_off.svg",
+            isMyFavoriteContent
+                ? "assets/svg/heart_on.svg"
+                : "assets/svg/heart_off.svg",
             width: 25,
             height: 25,
+            color: Color(0xfff08f4f),
           ),
         ),
         Container(
@@ -336,6 +355,7 @@ class _DetailContentViewState extends State<DetailContentView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       extendBodyBehindAppBar: true,
       appBar: _appbarWidget(),
       body: _bodyWidget(),

@@ -1,4 +1,6 @@
-class ContentRepository {
+import 'package:carrot_market/repository/local_storage_repository.dart';
+
+class ContentRepository extends LocalStorageRepository {
   Map<String, dynamic> data = {
     "ara": [
       {
