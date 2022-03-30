@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carrot_market/components/manor_temparature_widget.dart';
+import 'package:carrot_market/repository/contents_repository.dart';
 import 'package:carrot_market/utils/data_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,7 @@ class DetailContentView extends StatefulWidget {
 class _DetailContentViewState extends State<DetailContentView>
     with SingleTickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late ContentRepository contentRepository = new ContentRepository();
   late Size size;
   late List<Map<String, String>> imgList;
   int _current = 0;
@@ -22,12 +24,12 @@ class _DetailContentViewState extends State<DetailContentView>
   final ScrollController _controller = ScrollController();
   late AnimationController _animationController;
   late Animation _colorTwean;
-  late bool isMyFavoriteContent;
+  late bool isMyFavoriteContent = false;
 
   @override
   void initState() {
     super.initState();
-    isMyFavoriteContent = false;
+    contentRepository = new ContentRepository();
 
     _animationController = AnimationController(vsync: this);
     _colorTwean = ColorTween(begin: Colors.white, end: Colors.black)
@@ -42,6 +44,15 @@ class _DetailContentViewState extends State<DetailContentView>
         scrollPositionToAlpha = _controller.offset;
         _animationController.value = scrollPositionToAlpha / 255;
       });
+    });
+
+    _loadMyFavoriteContentState();
+  }
+
+  _loadMyFavoriteContentState() async {
+    bool ck = await contentRepository.isMyFavoriteContent(widget.data["cid"]!);
+    setState(() {
+      isMyFavoriteContent = ck;
     });
   }
 
@@ -282,6 +293,7 @@ class _DetailContentViewState extends State<DetailContentView>
       child: Row(children: [
         GestureDetector(
           onTap: () {
+            contentRepository.addMyFavoriteContent(widget.data);
             setState(() {
               isMyFavoriteContent = !isMyFavoriteContent;
             });
