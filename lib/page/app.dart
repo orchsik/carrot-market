@@ -54,7 +54,6 @@ class _AppState extends State<App> {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       onTap: (int index) {
-        print(index);
         setState(() {
           _currentPageIndex = index;
         });

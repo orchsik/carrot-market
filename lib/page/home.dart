@@ -35,9 +35,7 @@ class _HomeState extends State<Home> {
   PreferredSizeWidget _appBarWidget() {
     return AppBar(
       title: GestureDetector(
-        onTap: () {
-          print("click");
-        },
+        onTap: () {},
         child: PopupMenuButton<String>(
           offset: Offset(0, 28),
           shape: ShapeBorder.lerp(
@@ -96,7 +94,6 @@ class _HomeState extends State<Home> {
                 },
               ),
             );
-            print(datas[index]["title"]);
           },
           child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10),
