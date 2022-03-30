@@ -292,8 +292,13 @@ class _DetailContentViewState extends State<DetailContentView>
       height: 55,
       child: Row(children: [
         GestureDetector(
-          onTap: () {
-            contentRepository.addMyFavoriteContent(widget.data);
+          onTap: () async {
+            if (isMyFavoriteContent) {
+              await contentRepository
+                  .deleteMyFavoriteContent(widget.data['cid']!);
+            } else {
+              await contentRepository.addMyFavoriteContent(widget.data);
+            }
             setState(() {
               isMyFavoriteContent = !isMyFavoriteContent;
             });
