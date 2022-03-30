@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carrot_market/components/manor_temparature_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/parser.dart';
 
 class DetailContentView extends StatefulWidget {
-  Map<String, String> data;
+  final Map<String, String> data;
   DetailContentView({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -142,20 +144,124 @@ class _DetailContentViewState extends State<DetailContentView> {
     );
   }
 
+  Widget _line() {
+    return Container(
+      height: 1,
+      color: Colors.grey.withOpacity(0.3),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+    );
+  }
+
+  Widget _contentDetail() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(height: 20),
+          Text(
+            widget.data["title"]!,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "디지털/가전 ∙ 22시간 전",
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          SizedBox(height: 15),
+          Text(
+            "선물받은 새상품이고\n상품 꺼내보기만 했습니다\n거래는 직거래만 합니다.",
+            style: TextStyle(fontSize: 15, height: 1.5),
+          ),
+          SizedBox(height: 15),
+          Text(
+            "채팅 3 ∙ 관심 17 ∙ 조회 295",
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          SizedBox(height: 15),
+        ],
+      ),
+    );
+  }
+
+  Widget _otherCellContents() {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "판매자님의 판매 상품",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "모두보기",
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _bodyWidget() {
-    return Column(
-      children: [
-        _makeSliderWidget(),
-        _sellerSimpleInfo(),
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildListDelegate([
+            _makeSliderWidget(),
+            _sellerSimpleInfo(),
+            _line(),
+            _contentDetail(),
+            _otherCellContents(),
+          ]),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+            ),
+            delegate: SliverChildListDelegate(
+              List.generate(20, (index) {
+                return Container(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(color: Colors.grey, height: 120),
+                        ),
+                        Text("상품 제목", style: TextStyle(fontSize: 14)),
+                        Text("가격",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold)),
+                      ]),
+                );
+              }).toList(),
+            ),
+          ),
+        )
       ],
     );
   }
 
   Widget _bottomBarWidget() {
-    return Container(
+    return SizedBox(
       width: size.width,
       height: 55,
-      color: Colors.red,
+      child: Row(children: [
+        GestureDetector(
+          onTap: () {
+            print("관심상품 이벤트 발생");
+          },
+          child: SvgPicture.asset(
+            "assets/svg/heart_off.svg",
+            width: 25,
+            height: 25,
+          ),
+        ),
+      ]),
     );
   }
 
