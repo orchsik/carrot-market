@@ -1,11 +1,12 @@
 # flutter commands
 
-flutter create -org com.carrot --platforms=android,ios carrot_market
-flutter clean
-flutter doctor -v
-flutter build appbundle
-flutter build apk
+flutter create -org com.carrot --platforms=android,ios carrot_market  
+flutter clean  
+flutter doctor -v  
+flutter build appbundle  
+flutter build apk  
 flutter build ios
+flutter build ipa
 
 # vscode shortcut
 
